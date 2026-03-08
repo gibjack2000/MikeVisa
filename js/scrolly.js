@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroContent = document.querySelector('.hero-content');
 
     // Config
-    const frameCount = 120;
+    const frameCount = 100;
+    const startFrame = 21;
     const images = [];
     const airfoils = { frame: 0 };
     let loadedImagesCount = 0;
@@ -20,13 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Preload images
     const preloadImages = () => {
-        for (let i = 1; i <= frameCount; i++) {
+        for (let i = 0; i < frameCount; i++) {
             const img = new Image();
-            img.src = currentFrame(i);
+            // Map 0-99 to 21-120
+            img.src = currentFrame(i + startFrame);
             img.onload = () => {
                 loadedImagesCount++;
                 if (loadedImagesCount === 1) {
-                    // Draw first frame as soon as it's ready to prevent blank screen
+                    // Draw first frame successfully loaded to prevent blank screen
                     updateImage(0);
                 }
                 if (loadedImagesCount === frameCount) {
@@ -84,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Determine which frame to show
         const frameIndex = Math.min(
             frameCount - 1,
-            Math.ceil(boundedFraction * frameCount)
+            Math.floor(boundedFraction * frameCount)
         );
 
         // Optional: Fade out text as we scroll down deep
